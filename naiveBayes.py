@@ -19,15 +19,17 @@ def expectedProbability(inputList,dictList,targetLabelDict):
 	print probDict
 			
 	
-			
+#Reading input file		
 csvfile = open("/home/manasvi/Documents/Fall2015/Appl.ML/code/condo.csv","r") 
 reader = csv.reader(csvfile)
 ncol = len(next(reader))
 csvfile.seek(0)
 
+#Storing the index for target label
 targetAttributeIndex = ncol-1
 
 targetLabelDict ={}
+#Creating a dictionary for target label; It will store each possible value and count
 for row in reader:
 	if(targetLabelDict.has_key(row[targetAttributeIndex])):
 		targetLabelDict[row[targetAttributeIndex]] += 1
@@ -38,6 +40,9 @@ dictList = []
 
 i = -1
 csvfile.seek(0)
+#Creating list of dictionaries.
+#For example if target label has values Y and N. 
+#Then for each of the values of remaining attributes, it stores the corresponding count of Y and N
 for val in targetLabelDict.keys():
 	tempList = []
 	for i in range(0,ncol-1):
@@ -56,6 +61,7 @@ for val in targetLabelDict.keys():
 		csvfile.seek(0)
 	dictList.append(tempList)
 
+#Sample test case
 inputList = ['H','Y','M','H','Y']
 
 expectedProbability(inputList,dictList,targetLabelDict)
