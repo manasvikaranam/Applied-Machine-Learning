@@ -1,29 +1,26 @@
 import csv
 import numpy
 def expectedProbability(inputList,dictList,targetLabelDict):
-	print "in func"
+	
 	maxProb = 0.0
 	cumProb = 1.0
 	prob = 1.0
+	probDict={}
 	for i in range(0,len(dictList)):
 		for j in range(0,len(dictList[i])):
 			if(dictList[i][j].has_key(inputList[j])):
 				
-				print targetLabelDict.values()[i]
+				
 				prob = (float(dictList[i][j][inputList[j]])/float(targetLabelDict.values()[i]))
 				cumProb *= prob
 		
-		if(maxProb < cumProb):
-			maxProb = cumProb
-	print maxProb
+		probDict[targetLabelDict.keys()[i]] = cumProb
+			
+	print probDict
 			
 	
 			
-	
-
-
-
-csvfile = open("/home/manasvi/Documents/Fall2015/Appl.ML/HW/condo.csv","r") 
+csvfile = open("/home/manasvi/Documents/Fall2015/Appl.ML/code/condo.csv","r") 
 reader = csv.reader(csvfile)
 ncol = len(next(reader))
 csvfile.seek(0)
@@ -60,6 +57,6 @@ for val in targetLabelDict.keys():
 	dictList.append(tempList)
 
 inputList = ['H','Y','M','H','Y']
-print "calling"
+
 expectedProbability(inputList,dictList,targetLabelDict)
 	
