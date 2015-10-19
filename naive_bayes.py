@@ -67,8 +67,12 @@ labels=sorted(set(line[-1] for line in lines))
 ##opening the test file 
 test_file=open("zoo-test.csv","r")
 lines2=list(csv.reader(test_file))
-
-
+matrix=[]
+for i in range(len(labels)):
+	l=[]
+	for j in range(len(labels)):
+		l.append(0)
+	matrix.append(l)
 for label in labels :
 	#calculate the priors,count the number of times a feature value occurs for class labels through one vs. all 
 	One,Zero,Priors=binary_classify(lines,label)
@@ -84,9 +88,10 @@ for label in labels :
         T_N=0
         T_P=0
 	for line in lines2:
-		print line
+#		print line
+		original_label=int(line[-1])
 		expected_class_label="1" if line[-1]==label else "0"
-		print "Expected class label: ",expected_class_label 
+#		print "Expected class label: ",expected_class_label 
 		prob_one=1.0
 		prob_zero=1.0
 		for feature_no in range(len(line)-1):
@@ -105,16 +110,23 @@ for label in labels :
 		new_prob_one=float(prob_one)/(prob_one+prob_zero)
 		new_prob_zero=float(prob_zero)/(prob_one+prob_zero)
 		predicted_class_label="1" if new_prob_one>new_prob_zero else "0"
-		print "Predicted class label : ",predicted_class_label 
+#		print "Predicted class label : ",predicted_class_label 
 		if expected_class_label=="0" and predicted_class_label=="0":
 			T_N+=1
 		elif expected_class_label=="1" and predicted_class_label=="1":
 			T_P+=1
+			#matrix[int(label)-1][int(label)-1]+=1
 		elif expected_class_label=="1" and predicted_class_label=="0":
 			F_N+=1
 		else:
 			F_P+=1
+			matrix[original_label-1][int(label)-1]+=1
+			
+#	print label
+	matrix[int(label)-1][int(label)-1]=T_P
 	print "True Positives: ",T_P,"\t|\t","False Negatives: ",F_N
 	print "*"*60
 	print "False Positives: ",F_P,"\t|\t","True Negatives: ",T_N
 #	print T_P+T_N+F_P+F_N
+for row in matrix:
+	print row 
